@@ -2,25 +2,51 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1a1a1a;
+
+  /* Colores de marca Dulce Paladar */
+  --color-primario: #F400A1;
+  --color-secundario: #C273E0;
+  --color-primario-claro: #ff4dbe;
+  --color-primario-oscuro: #c20080;
+  --color-secundario-claro: #d9a3ed;
+  --color-secundario-oscuro: #9b4cc0;
+
+  /* Neutros */
+  --color-gris-50: #fafafa;
+  --color-gris-100: #f5f5f5;
+  --color-gris-200: #e5e5e5;
+  --color-gris-300: #d4d4d4;
+  --color-gris-500: #737373;
+  --color-gris-700: #404040;
+  --color-gris-900: #171717;
+
+  /* Estados */
+  --color-exito: #22c55e;
+  --color-advertencia: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primario: var(--color-primario);
+  --color-secundario: var(--color-secundario);
+  --color-primario-claro: var(--color-primario-claro);
+  --color-primario-oscuro: var(--color-primario-oscuro);
+  --color-secundario-claro: var(--color-secundario-claro);
+  --color-secundario-oscuro: var(--color-secundario-oscuro);
+  --color-exito: var(--color-exito);
+  --color-advertencia: var(--color-advertencia);
+  --color-error: var(--color-error);
+  --color-info: var(--color-info);
+  --font-principal: var(--font-principal);
+  --font-secundaria: var(--font-secundaria);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-secundaria), Arial, Helvetica, sans-serif;
 }
