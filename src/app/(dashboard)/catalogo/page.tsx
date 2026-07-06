@@ -3,6 +3,91 @@ import Link from "next/link";
 import { formatoCOP } from "@/lib/formato";
 import EliminarProductoBtn from "./eliminar-btn";
 
+type ProductoConRelaciones = {
+  id: string;
+  categoria_id: string;
+  nombre: string;
+  tipo: string;
+  precio_base: number | null;
+  foto_url: string | null;
+  activo: boolean;
+  categorias: { nombre: string } | null;
+  variaciones: { precio: number }[];
+};
+
+function TarjetaProducto({ producto }: { producto: ProductoConRelaciones }) {
+  const inactivo = !producto.activo;
+
+  return (
+    <div
+      className={`rounded-xl border overflow-hidden transition-shadow ${
+        inactivo
+          ? "bg-gray-50 border-gray-200 opacity-60"
+          : "bg-white border-gray-200 hover:shadow-md"
+      }`}
+    >
+      <div className={`h-40 flex items-center justify-center ${inactivo ? "bg-gray-100 grayscale" : "bg-gray-100"}`}>
+        {producto.foto_url ? (
+          <img
+            src={producto.foto_url}
+            alt={producto.nombre}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="text-4xl">🧁</span>
+        )}
+      </div>
+
+      <div className="p-4">
+        <div className="flex items-start justify-between mb-1">
+          <h3 className={`font-semibold text-sm ${inactivo ? "text-gray-500" : "text-gray-900"}`}>
+            {producto.nombre}
+          </h3>
+          <span
+            className={`px-2 py-0.5 rounded-full text-xs ${
+              producto.activo
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-600"
+            }`}
+          >
+            {producto.activo ? "Activo" : "Sin stock"}
+          </span>
+        </div>
+
+        <p className="text-xs text-gray-400 mb-2">
+          {producto.categorias?.nombre} · {producto.tipo}
+        </p>
+
+        {producto.tipo === "simple" && (
+          <p className={`text-lg font-bold ${inactivo ? "text-gray-400" : "text-primario"}`}>
+            {formatoCOP(producto.precio_base)}
+          </p>
+        )}
+        {producto.tipo === "variaciones" && producto.variaciones?.length > 0 && (
+          <p className={`text-sm font-semibold ${inactivo ? "text-gray-400" : "text-primario"}`}>
+            Desde {formatoCOP(Math.min(...producto.variaciones.map((v) => v.precio)))}
+          </p>
+        )}
+        {producto.tipo === "personalizado" && (
+          <p className={`text-sm font-semibold ${inactivo ? "text-gray-400" : "text-secundario"}`}>
+            Precio a cotizar
+          </p>
+        )}
+
+        <div className="flex gap-2 mt-3">
+          <Link
+            href={`/catalogo/${producto.id}`}
+            className="flex-1 text-center px-3 py-1.5 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+          >
+            Editar
+          </Link>
+          <EliminarProductoBtn id={producto.id} nombre={producto.nombre} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default async function CatalogoPage() {
   const supabase = await createClient();
 
@@ -17,6 +102,9 @@ export default async function CatalogoPage() {
     .select("*, categorias(nombre), variaciones(*)")
     .order("nombre");
 
+  const activos = productos?.filter((p) => p.activo) || [];
+  const inactivos = productos?.filter((p) => !p.activo) || [];
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -25,7 +113,7 @@ export default async function CatalogoPage() {
             Catálogo
           </h1>
           <p className="text-gray-500 text-sm mt-1">
-            {productos?.length || 0} productos
+            {activos.length} activos · {inactivos.length} sin stock
           </p>
         </div>
         <Link
@@ -39,7 +127,7 @@ export default async function CatalogoPage() {
       {/* Filtros por categoría */}
       <div className="flex gap-2 mb-6 flex-wrap">
         {categorias?.map((cat) => {
-          const count = productos?.filter((p) => p.categoria_id === cat.id).length || 0;
+          const count = activos.filter((p) => p.categoria_id === cat.id).length;
           return (
             <span
               key={cat.id}
@@ -51,7 +139,7 @@ export default async function CatalogoPage() {
         })}
       </div>
 
-      {/* Lista de productos */}
+      {/* Productos activos */}
       {!productos || productos.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
           <p className="text-gray-400 text-lg mb-2">No hay productos aún</p>
@@ -66,84 +154,34 @@ export default async function CatalogoPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {productos.map((producto) => (
-            <div
-              key={producto.id}
-              className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
-            >
-              {/* Foto */}
-              <div className="h-40 bg-gray-100 flex items-center justify-center">
-                {producto.foto_url ? (
-                  <img
-                    src={producto.foto_url}
-                    alt={producto.nombre}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-4xl">🧁</span>
-                )}
+        <>
+          {activos.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {activos.map((producto) => (
+                <TarjetaProducto key={producto.id} producto={producto as ProductoConRelaciones} />
+              ))}
+            </div>
+          )}
+
+          {inactivos.length > 0 && (
+            <div className="mt-10">
+              <div className="flex items-center gap-3 mb-4">
+                <h2 className="text-lg font-semibold text-gray-500">
+                  Sin stock / Inactivos
+                </h2>
+                <div className="flex-1 h-px bg-gray-200" />
+                <span className="text-sm text-gray-400">
+                  {inactivos.length} {inactivos.length === 1 ? "producto" : "productos"}
+                </span>
               </div>
-
-              {/* Info */}
-              <div className="p-4">
-                <div className="flex items-start justify-between mb-1">
-                  <h3 className="font-semibold text-gray-900 text-sm">
-                    {producto.nombre}
-                  </h3>
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-xs ${
-                      producto.activo
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-500"
-                    }`}
-                  >
-                    {producto.activo ? "Activo" : "Inactivo"}
-                  </span>
-                </div>
-
-                <p className="text-xs text-gray-400 mb-2">
-                  {(producto.categorias as { nombre: string })?.nombre} · {producto.tipo}
-                </p>
-
-                {/* Precio */}
-                {producto.tipo === "simple" && (
-                  <p className="text-lg font-bold text-primario">
-                    {formatoCOP(producto.precio_base)}
-                  </p>
-                )}
-                {producto.tipo === "variaciones" && producto.variaciones && (
-                  <p className="text-sm text-primario font-semibold">
-                    Desde{" "}
-                    {formatoCOP(
-                      Math.min(
-                        ...(producto.variaciones as { precio: number }[]).map(
-                          (v) => v.precio
-                        )
-                      )
-                    )}
-                  </p>
-                )}
-                {producto.tipo === "personalizado" && (
-                  <p className="text-sm text-secundario font-semibold">
-                    Precio a cotizar
-                  </p>
-                )}
-
-                {/* Acciones */}
-                <div className="flex gap-2 mt-3">
-                  <Link
-                    href={`/catalogo/${producto.id}`}
-                    className="flex-1 text-center px-3 py-1.5 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"
-                  >
-                    Editar
-                  </Link>
-                  <EliminarProductoBtn id={producto.id} nombre={producto.nombre} />
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {inactivos.map((producto) => (
+                  <TarjetaProducto key={producto.id} producto={producto as ProductoConRelaciones} />
+                ))}
               </div>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );
