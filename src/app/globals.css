@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
+  --background: #faf8f5;
+  --foreground: #2d2319;
 
   /* Colores de marca Dulce Paladar */
   --color-primario: #F400A1;
@@ -11,6 +11,15 @@
   --color-primario-oscuro: #c20080;
   --color-secundario-claro: #d9a3ed;
   --color-secundario-oscuro: #9b4cc0;
+
+  /* Cálidos de pastelería */
+  --color-crema: #fdf6ee;
+  --color-crema-oscuro: #f5ead8;
+  --color-cafe: #8b6f47;
+  --color-cafe-claro: #c9a96e;
+  --color-cafe-oscuro: #5c4a2f;
+  --color-rosa-suave: #fce4ec;
+  --color-rosa-medio: #f8bbd0;
 
   /* Neutros */
   --color-gris-50: #fafafa;
@@ -37,6 +46,13 @@
   --color-primario-oscuro: var(--color-primario-oscuro);
   --color-secundario-claro: var(--color-secundario-claro);
   --color-secundario-oscuro: var(--color-secundario-oscuro);
+  --color-crema: var(--color-crema);
+  --color-crema-oscuro: var(--color-crema-oscuro);
+  --color-cafe: var(--color-cafe);
+  --color-cafe-claro: var(--color-cafe-claro);
+  --color-cafe-oscuro: var(--color-cafe-oscuro);
+  --color-rosa-suave: var(--color-rosa-suave);
+  --color-rosa-medio: var(--color-rosa-medio);
   --color-exito: var(--color-exito);
   --color-advertencia: var(--color-advertencia);
   --color-error: var(--color-error);
@@ -49,4 +65,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-secundaria), Arial, Helvetica, sans-serif;
+}
+
+/* Scrollbar sutil */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gris-300);
+  border-radius: 3px;
 }
