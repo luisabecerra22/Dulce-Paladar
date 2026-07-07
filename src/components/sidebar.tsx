@@ -7,6 +7,7 @@ import { useState } from "react";
 
 const menuAdmin = [
   { href: "/dashboard", label: "Dashboard", icono: "dashboard" },
+  { href: "/mesas", label: "Mesas", icono: "mesas" },
   { href: "/pos", label: "Ventas / POS", icono: "pos" },
   { href: "/catalogo", label: "Productos", icono: "productos" },
   { href: "/cocina", label: "Comandas", icono: "comandas" },
@@ -16,6 +17,7 @@ const menuAdmin = [
 
 const menuVendedor = [
   { href: "/dashboard", label: "Dashboard", icono: "dashboard" },
+  { href: "/mesas", label: "Mesas", icono: "mesas" },
   { href: "/pos", label: "Ventas / POS", icono: "pos" },
   { href: "/cocina", label: "Comandas", icono: "comandas" },
 ];
@@ -36,6 +38,12 @@ function getMenu(rol: string) {
 function Icono({ tipo, className }: { tipo: string; className?: string }) {
   const cls = className || "w-5 h-5";
   switch (tipo) {
+    case "mesas":
+      return (
+        <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 6v8a2 2 0 002 2h12a2 2 0 002-2V6M8 16v4m8-4v4M6 6V4h12v2" />
+        </svg>
+      );
     case "dashboard":
       return (
         <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
