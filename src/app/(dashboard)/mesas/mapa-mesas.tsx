@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import { useRouter } from "next/navigation";
 import { formatoCOP } from "@/lib/formato";
@@ -83,28 +83,14 @@ function tiempoTranscurrido(fecha: string): string {
   return `${Math.floor(min / 60)}h ${min % 60}m`;
 }
 
-function FormaMesa({ tipo, capacidad, color }: { tipo: string; capacidad: number; color: string }) {
+function FormaMesa({ tipo, color }: { tipo: string; color: string }) {
   const fill = color;
   const silla = color;
 
-  if (tipo === "mesa" && capacidad <= 2) {
+  if (tipo === "mesa") {
     return (
       <svg viewBox="0 0 120 120" className="w-full h-full">
-        {/* Mesa redonda pequeña */}
-        <circle cx="60" cy="60" r="22" fill={fill} opacity="0.15" stroke={fill} strokeWidth="2" />
-        {/* 2 sillas */}
-        <rect x="50" y="18" width="20" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
-        <rect x="50" y="92" width="20" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
-      </svg>
-    );
-  }
-
-  if (tipo === "mesa" && capacidad <= 4) {
-    return (
-      <svg viewBox="0 0 120 120" className="w-full h-full">
-        {/* Mesa cuadrada */}
         <rect x="32" y="32" width="56" height="56" rx="8" fill={fill} opacity="0.15" stroke={fill} strokeWidth="2" />
-        {/* 4 sillas */}
         <rect x="46" y="12" width="28" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
         <rect x="46" y="98" width="28" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
         <rect x="12" y="46" width="10" height="28" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
@@ -113,28 +99,10 @@ function FormaMesa({ tipo, capacidad, color }: { tipo: string; capacidad: number
     );
   }
 
-  if (tipo === "mesa") {
-    return (
-      <svg viewBox="0 0 140 120" className="w-full h-full">
-        {/* Mesa rectangular grande */}
-        <rect x="22" y="30" width="96" height="60" rx="8" fill={fill} opacity="0.15" stroke={fill} strokeWidth="2" />
-        {/* 6 sillas: 3 arriba, 3 abajo */}
-        <rect x="28" y="10" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
-        <rect x="58" y="10" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
-        <rect x="88" y="10" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
-        <rect x="28" y="100" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
-        <rect x="58" y="100" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
-        <rect x="88" y="100" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
-      </svg>
-    );
-  }
-
   if (tipo === "barra") {
     return (
       <svg viewBox="0 0 160 100" className="w-full h-full">
-        {/* Barra larga */}
         <rect x="10" y="20" width="140" height="30" rx="6" fill={fill} opacity="0.15" stroke={fill} strokeWidth="2" />
-        {/* Banquetas abajo */}
         <circle cx="35" cy="72" r="10" fill={silla} opacity="0.3" stroke={silla} strokeWidth="1.5" />
         <circle cx="65" cy="72" r="10" fill={silla} opacity="0.3" stroke={silla} strokeWidth="1.5" />
         <circle cx="95" cy="72" r="10" fill={silla} opacity="0.3" stroke={silla} strokeWidth="1.5" />
@@ -146,10 +114,8 @@ function FormaMesa({ tipo, capacidad, color }: { tipo: string; capacidad: number
   if (tipo === "caja") {
     return (
       <svg viewBox="0 0 120 100" className="w-full h-full">
-        {/* Mostrador en L */}
         <rect x="15" y="20" width="90" height="30" rx="4" fill={fill} opacity="0.15" stroke={fill} strokeWidth="2" />
         <rect x="75" y="20" width="30" height="60" rx="4" fill={fill} opacity="0.1" stroke={fill} strokeWidth="2" />
-        {/* Pantalla/caja */}
         <rect x="30" y="28" width="20" height="14" rx="2" fill={fill} opacity="0.25" stroke={fill} strokeWidth="1" />
       </svg>
     );
@@ -158,7 +124,6 @@ function FormaMesa({ tipo, capacidad, color }: { tipo: string; capacidad: number
   if (tipo === "domicilio") {
     return (
       <svg viewBox="0 0 120 100" className="w-full h-full">
-        {/* Moto/bicicleta estilizada */}
         <circle cx="35" cy="60" r="18" fill={fill} opacity="0.1" stroke={fill} strokeWidth="1.5" />
         <circle cx="85" cy="60" r="18" fill={fill} opacity="0.1" stroke={fill} strokeWidth="1.5" />
         <path d="M35 60 L55 35 L75 35 L85 60" stroke={fill} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -167,7 +132,6 @@ function FormaMesa({ tipo, capacidad, color }: { tipo: string; capacidad: number
     );
   }
 
-  // punto_entrega
   return (
     <svg viewBox="0 0 120 100" className="w-full h-full">
       <rect x="20" y="25" width="80" height="50" rx="8" fill={fill} opacity="0.1" stroke={fill} strokeWidth="2" />
@@ -206,6 +170,15 @@ export default function MapaMesas({
   });
   const [filtroEstado, setFiltroEstado] = useState<string | null>(null);
   const [, setTick] = useState(0);
+
+  // Drag & drop
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
+
+  // Transferir mesa
+  const [modalTransferir, setModalTransferir] = useState(false);
+  const [mesaDestino, setMesaDestino] = useState<string>("");
+  const [transfiriendo, setTransfiriendo] = useState(false);
 
   const router = useRouter();
   const supabase = createClient();
@@ -317,6 +290,92 @@ export default function MapaMesas({
     router.refresh();
   }
 
+  // Drag & drop handlers
+  function handleDragStart(mesaId: string) {
+    setDragId(mesaId);
+  }
+
+  function handleDragOver(e: React.DragEvent, mesaId: string) {
+    e.preventDefault();
+    if (mesaId !== dragId) setDragOverId(mesaId);
+  }
+
+  function handleDragLeave() {
+    setDragOverId(null);
+  }
+
+  async function handleDrop(targetId: string) {
+    if (!dragId || dragId === targetId) {
+      setDragId(null);
+      setDragOverId(null);
+      return;
+    }
+
+    const dragMesa = mesas.find((m) => m.id === dragId);
+    const targetMesa = mesas.find((m) => m.id === targetId);
+    if (!dragMesa || !targetMesa) { setDragId(null); setDragOverId(null); return; }
+
+    const sameZone = mesas.filter((m) => m.zona === targetMesa.zona).sort((a, b) => a.orden - b.orden);
+    const dragIdx = sameZone.findIndex((m) => m.id === dragId);
+    const targetIdx = sameZone.findIndex((m) => m.id === targetId);
+
+    if (dragMesa.zona !== targetMesa.zona) {
+      await supabase.from("mesas").update({ zona: targetMesa.zona, orden: targetMesa.orden }).eq("id", dragId);
+    } else if (dragIdx !== -1 && targetIdx !== -1) {
+      const reordered = [...sameZone];
+      const [moved] = reordered.splice(dragIdx, 1);
+      reordered.splice(targetIdx, 0, moved);
+      await Promise.all(
+        reordered.map((m, i) => supabase.from("mesas").update({ orden: i }).eq("id", m.id))
+      );
+    }
+
+    setDragId(null);
+    setDragOverId(null);
+    await recargar();
+  }
+
+  function handleDragEnd() {
+    setDragId(null);
+    setDragOverId(null);
+  }
+
+  // Transferir pedido a otra mesa
+  async function transferirPedido() {
+    if (!detalleMesa || !mesaDestino) return;
+    const pedido = obtenerPedidoMesa(detalleMesa, pedidos);
+    if (!pedido) return;
+
+    setTransfiriendo(true);
+    const nuevoNum = parseInt(mesaDestino.replace(/\D/g, "")) || 0;
+
+    const { error: err } = await supabase
+      .from("pedidos")
+      .update({ mesa_numero: nuevoNum })
+      .eq("id", pedido.id);
+
+    if (err) {
+      setError("Error al transferir: " + err.message);
+      setTransfiriendo(false);
+      return;
+    }
+
+    setTransfiriendo(false);
+    setModalTransferir(false);
+    setMesaDestino("");
+    setDetalleMesa(null);
+    await recargar();
+  }
+
+  const mesasLibres = useMemo(() => {
+    if (!detalleMesa) return [];
+    return mesas.filter((m) => {
+      if (m.id === detalleMesa.id) return false;
+      if (m.tipo !== "mesa") return false;
+      return obtenerEstadoMesa(m, pedidos) === "libre";
+    });
+  }, [mesas, pedidos, detalleMesa]);
+
   return (
     <div>
       {/* Header */}
@@ -326,7 +385,7 @@ export default function MapaMesas({
             Organización de Mesas
           </h1>
           <p className="text-sm text-cafe mt-1">
-            {resumen.total} zonas · {resumen.libres} libres · {resumen.ocupadas} ocupadas · se actualiza en tiempo real
+            {resumen.total} zonas · {resumen.libres} libres · {resumen.ocupadas} ocupadas · arrastra para reordenar
           </p>
         </div>
         <button
@@ -385,14 +444,23 @@ export default function MapaMesas({
                 const estado = obtenerEstadoMesa(mesa, pedidos);
                 const cfg = ESTADO_CONFIG[estado];
                 const pedido = obtenerPedidoMesa(mesa, pedidos);
-
                 const colorSvg = ESTADO_COLORES[estado] || ESTADO_COLORES.libre;
+                const isDragging = dragId === mesa.id;
+                const isDragOver = dragOverId === mesa.id;
 
                 return (
                   <div
                     key={mesa.id}
+                    draggable
+                    onDragStart={() => handleDragStart(mesa.id)}
+                    onDragOver={(e) => handleDragOver(e, mesa.id)}
+                    onDragLeave={handleDragLeave}
+                    onDrop={() => handleDrop(mesa.id)}
+                    onDragEnd={handleDragEnd}
                     onClick={() => setDetalleMesa(mesa)}
-                    className={`relative rounded-2xl border-2 ${cfg.border} cursor-pointer hover:shadow-lg transition-all group overflow-hidden ${cfg.bg}`}
+                    className={`relative rounded-2xl border-2 cursor-grab active:cursor-grabbing hover:shadow-lg transition-all group overflow-hidden ${cfg.border} ${cfg.bg} ${
+                      isDragging ? "opacity-40 scale-95" : ""
+                    } ${isDragOver ? "ring-2 ring-primario ring-offset-2 scale-105" : ""}`}
                   >
                     {/* Forma de mesa visual */}
                     <div className="relative px-4 pt-4 pb-2">
@@ -404,9 +472,18 @@ export default function MapaMesas({
                         </span>
                       </div>
 
-                      {/* SVG de mesa con sillas */}
+                      {/* Drag handle indicator */}
+                      <div className="absolute top-2 left-2 z-10 opacity-0 group-hover:opacity-60 transition-opacity">
+                        <svg className="w-4 h-4 text-cafe" viewBox="0 0 16 16" fill="currentColor">
+                          <circle cx="4" cy="3" r="1.5" /><circle cx="12" cy="3" r="1.5" />
+                          <circle cx="4" cy="8" r="1.5" /><circle cx="12" cy="8" r="1.5" />
+                          <circle cx="4" cy="13" r="1.5" /><circle cx="12" cy="13" r="1.5" />
+                        </svg>
+                      </div>
+
+                      {/* SVG de mesa */}
                       <div className="w-full h-24 flex items-center justify-center">
-                        <FormaMesa tipo={mesa.tipo} capacidad={mesa.capacidad} color={colorSvg} />
+                        <FormaMesa tipo={mesa.tipo} color={colorSvg} />
                       </div>
                     </div>
 
@@ -436,7 +513,7 @@ export default function MapaMesas({
                     </div>
 
                     {/* Acciones hover */}
-                    <div className="absolute top-2 left-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                    <div className="absolute bottom-[72px] right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                       <button
                         onClick={(e) => { e.stopPropagation(); abrirEditar(mesa); }}
                         className="w-7 h-7 rounded-lg bg-white/90 text-blue-600 flex items-center justify-center hover:bg-blue-50 transition-colors shadow-sm"
@@ -463,7 +540,7 @@ export default function MapaMesas({
       </div>
 
       {/* Modal: Detalle de mesa */}
-      {detalleMesa && (
+      {detalleMesa && !modalTransferir && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md">
             {(() => {
@@ -531,6 +608,14 @@ export default function MapaMesas({
                     >
                       {pedido ? "Ver en POS" : "Nuevo pedido"}
                     </Link>
+                    {pedido && mesasLibres.length > 0 && (
+                      <button
+                        onClick={() => { setMesaDestino(""); setModalTransferir(true); }}
+                        className="px-4 py-2.5 bg-blue-50 border border-blue-200 rounded-lg text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+                      >
+                        Cambiar mesa
+                      </button>
+                    )}
                     <button
                       onClick={() => { setDetalleMesa(null); abrirEditar(detalleMesa); }}
                       className="px-4 py-2.5 border border-crema-oscuro rounded-lg text-sm font-medium text-cafe hover:bg-crema transition-colors"
@@ -541,6 +626,59 @@ export default function MapaMesas({
                 </>
               );
             })()}
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Transferir pedido a otra mesa */}
+      {modalTransferir && detalleMesa && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm">
+            <h3 className="text-lg font-bold text-cafe-oscuro mb-1">Cambiar mesa</h3>
+            <p className="text-sm text-cafe mb-4">
+              Mover pedido #{obtenerPedidoMesa(detalleMesa, pedidos)?.numero} de <strong>{detalleMesa.nombre}</strong> a:
+            </p>
+
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {mesasLibres.map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => setMesaDestino(m.nombre)}
+                  className={`p-3 rounded-xl border-2 text-center transition-all ${
+                    mesaDestino === m.nombre
+                      ? "border-primario bg-primario/5 text-primario"
+                      : "border-crema-oscuro text-cafe hover:border-cafe-claro"
+                  }`}
+                >
+                  <div className="w-10 h-10 mx-auto mb-1">
+                    <FormaMesa tipo="mesa" color={mesaDestino === m.nombre ? "#F400A1" : "#22c55e"} />
+                  </div>
+                  <span className="text-xs font-semibold">{m.nombre}</span>
+                </button>
+              ))}
+            </div>
+
+            {mesasLibres.length === 0 && (
+              <p className="text-sm text-amber-600 bg-amber-50 p-3 rounded-lg mb-4">No hay mesas libres disponibles.</p>
+            )}
+
+            {error && <p className="text-sm text-red-600 bg-red-50 p-2 rounded-lg mb-3">{error}</p>}
+
+            <div className="flex gap-2">
+              <button
+                onClick={transferirPedido}
+                disabled={!mesaDestino || transfiriendo}
+                className="flex-1 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 text-sm"
+              >
+                {transfiriendo ? "Moviendo..." : `Mover a ${mesaDestino || "..."}`}
+              </button>
+              <button
+                onClick={() => { setModalTransferir(false); setError(""); }}
+                className="px-4 py-2.5 border border-crema-oscuro rounded-lg font-semibold text-cafe hover:bg-crema transition-colors text-sm"
+              >
+                Cancelar
+              </button>
+            </div>
           </div>
         </div>
       )}
