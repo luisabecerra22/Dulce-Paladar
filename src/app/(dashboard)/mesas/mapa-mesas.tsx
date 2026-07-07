@@ -83,56 +83,106 @@ function tiempoTranscurrido(fecha: string): string {
   return `${Math.floor(min / 60)}h ${min % 60}m`;
 }
 
-function IconoMesa({ tipo }: { tipo: string }) {
+function FormaMesa({ tipo, capacidad, color }: { tipo: string; capacidad: number; color: string }) {
+  const fill = color;
+  const silla = color;
+
+  if (tipo === "mesa" && capacidad <= 2) {
+    return (
+      <svg viewBox="0 0 120 120" className="w-full h-full">
+        {/* Mesa redonda pequeña */}
+        <circle cx="60" cy="60" r="22" fill={fill} opacity="0.15" stroke={fill} strokeWidth="2" />
+        {/* 2 sillas */}
+        <rect x="50" y="18" width="20" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+        <rect x="50" y="92" width="20" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+      </svg>
+    );
+  }
+
+  if (tipo === "mesa" && capacidad <= 4) {
+    return (
+      <svg viewBox="0 0 120 120" className="w-full h-full">
+        {/* Mesa cuadrada */}
+        <rect x="32" y="32" width="56" height="56" rx="8" fill={fill} opacity="0.15" stroke={fill} strokeWidth="2" />
+        {/* 4 sillas */}
+        <rect x="46" y="12" width="28" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+        <rect x="46" y="98" width="28" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+        <rect x="12" y="46" width="10" height="28" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+        <rect x="98" y="46" width="10" height="28" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+      </svg>
+    );
+  }
+
   if (tipo === "mesa") {
     return (
-      <svg className="w-8 h-8" viewBox="0 0 40 40" fill="none">
-        <rect x="8" y="12" width="24" height="16" rx="3" fill="currentColor" opacity="0.15" />
-        <rect x="8" y="12" width="24" height="16" rx="3" stroke="currentColor" strokeWidth="1.5" />
-        <line x1="12" y1="28" x2="12" y2="34" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="28" y1="28" x2="28" y2="34" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="12" y1="12" x2="12" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="28" y1="12" x2="28" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <svg viewBox="0 0 140 120" className="w-full h-full">
+        {/* Mesa rectangular grande */}
+        <rect x="22" y="30" width="96" height="60" rx="8" fill={fill} opacity="0.15" stroke={fill} strokeWidth="2" />
+        {/* 6 sillas: 3 arriba, 3 abajo */}
+        <rect x="28" y="10" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+        <rect x="58" y="10" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+        <rect x="88" y="10" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+        <rect x="28" y="100" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+        <rect x="58" y="100" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
+        <rect x="88" y="100" width="24" height="10" rx="5" fill={silla} opacity="0.35" stroke={silla} strokeWidth="1.5" />
       </svg>
     );
   }
+
   if (tipo === "barra") {
     return (
-      <svg className="w-8 h-8" viewBox="0 0 40 40" fill="none">
-        <rect x="6" y="16" width="28" height="8" rx="2" fill="currentColor" opacity="0.15" />
-        <rect x="6" y="16" width="28" height="8" rx="2" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="13" cy="30" r="2" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="20" cy="30" r="2" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="27" cy="30" r="2" stroke="currentColor" strokeWidth="1.5" />
+      <svg viewBox="0 0 160 100" className="w-full h-full">
+        {/* Barra larga */}
+        <rect x="10" y="20" width="140" height="30" rx="6" fill={fill} opacity="0.15" stroke={fill} strokeWidth="2" />
+        {/* Banquetas abajo */}
+        <circle cx="35" cy="72" r="10" fill={silla} opacity="0.3" stroke={silla} strokeWidth="1.5" />
+        <circle cx="65" cy="72" r="10" fill={silla} opacity="0.3" stroke={silla} strokeWidth="1.5" />
+        <circle cx="95" cy="72" r="10" fill={silla} opacity="0.3" stroke={silla} strokeWidth="1.5" />
+        <circle cx="125" cy="72" r="10" fill={silla} opacity="0.3" stroke={silla} strokeWidth="1.5" />
       </svg>
     );
   }
+
   if (tipo === "caja") {
     return (
-      <svg className="w-8 h-8" viewBox="0 0 40 40" fill="none">
-        <rect x="8" y="10" width="24" height="20" rx="3" fill="currentColor" opacity="0.15" />
-        <rect x="8" y="10" width="24" height="20" rx="3" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="12" y="14" width="16" height="6" rx="1" stroke="currentColor" strokeWidth="1.2" />
-        <line x1="12" y1="24" x2="28" y2="24" stroke="currentColor" strokeWidth="1.2" />
+      <svg viewBox="0 0 120 100" className="w-full h-full">
+        {/* Mostrador en L */}
+        <rect x="15" y="20" width="90" height="30" rx="4" fill={fill} opacity="0.15" stroke={fill} strokeWidth="2" />
+        <rect x="75" y="20" width="30" height="60" rx="4" fill={fill} opacity="0.1" stroke={fill} strokeWidth="2" />
+        {/* Pantalla/caja */}
+        <rect x="30" y="28" width="20" height="14" rx="2" fill={fill} opacity="0.25" stroke={fill} strokeWidth="1" />
       </svg>
     );
   }
+
   if (tipo === "domicilio") {
     return (
-      <svg className="w-8 h-8" viewBox="0 0 40 40" fill="none">
-        <circle cx="20" cy="16" r="6" fill="currentColor" opacity="0.15" />
-        <circle cx="20" cy="16" r="6" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M14 26h12l2 8H12l2-8z" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="1.5" />
+      <svg viewBox="0 0 120 100" className="w-full h-full">
+        {/* Moto/bicicleta estilizada */}
+        <circle cx="35" cy="60" r="18" fill={fill} opacity="0.1" stroke={fill} strokeWidth="1.5" />
+        <circle cx="85" cy="60" r="18" fill={fill} opacity="0.1" stroke={fill} strokeWidth="1.5" />
+        <path d="M35 60 L55 35 L75 35 L85 60" stroke={fill} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="48" y="25" width="24" height="12" rx="3" fill={fill} opacity="0.2" stroke={fill} strokeWidth="1.5" />
       </svg>
     );
   }
+
+  // punto_entrega
   return (
-    <svg className="w-8 h-8" viewBox="0 0 40 40" fill="none">
-      <rect x="10" y="10" width="20" height="20" rx="4" fill="currentColor" opacity="0.15" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M16 20h8M20 16v8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <svg viewBox="0 0 120 100" className="w-full h-full">
+      <rect x="20" y="25" width="80" height="50" rx="8" fill={fill} opacity="0.1" stroke={fill} strokeWidth="2" />
+      <rect x="35" y="15" width="50" height="15" rx="4" fill={fill} opacity="0.2" stroke={fill} strokeWidth="1.5" />
+      <path d="M50 50 L55 60 L70 40" stroke={fill} strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
+
+const ESTADO_COLORES: Record<string, string> = {
+  libre: "#22c55e",
+  ocupada: "#F400A1",
+  preparando: "#3b82f6",
+  lista: "#f59e0b",
+};
 
 export default function MapaMesas({
   mesasIniciales,
@@ -313,58 +363,60 @@ export default function MapaMesas({
                 const cfg = ESTADO_CONFIG[estado];
                 const pedido = obtenerPedidoMesa(mesa, pedidos);
 
+                const colorSvg = ESTADO_COLORES[estado] || ESTADO_COLORES.libre;
+
                 return (
                   <div
                     key={mesa.id}
                     onClick={() => setDetalleMesa(mesa)}
-                    className={`relative bg-white rounded-2xl border-2 ${cfg.border} p-4 cursor-pointer hover:shadow-lg transition-all group`}
+                    className={`relative rounded-2xl border-2 ${cfg.border} cursor-pointer hover:shadow-lg transition-all group overflow-hidden ${cfg.bg}`}
                   >
-                    {/* Badge estado */}
-                    <div className="absolute top-3 right-3">
-                      <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${cfg.bg} ${cfg.text}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
-                        {cfg.label}
-                      </span>
-                    </div>
-
-                    {/* Icono */}
-                    <div className={`${cfg.text} mb-3`}>
-                      <IconoMesa tipo={mesa.tipo} />
-                    </div>
-
-                    {/* Nombre */}
-                    <h3 className="font-bold text-cafe-oscuro text-sm">{mesa.nombre}</h3>
-                    <p className="text-xs text-cafe mt-0.5">
-                      {mesa.capacidad > 0 ? `${mesa.capacidad} personas` : TIPOS.find((t) => t.value === mesa.tipo)?.label}
-                    </p>
-
-                    {/* Info del pedido activo */}
-                    {pedido && (
-                      <div className="mt-3 pt-2 border-t border-crema-oscuro">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-xs font-semibold text-cafe-oscuro">
-                            Pedido #{pedido.numero}
-                          </span>
-                          <span className="text-[10px] text-cafe">
-                            {tiempoTranscurrido(pedido.creado_en)}
-                          </span>
-                        </div>
-                        {(pedido.clientes as unknown as { nombre: string } | null)?.nombre && (
-                          <p className="text-[10px] text-cafe mb-1">
-                            👤 {(pedido.clientes as unknown as { nombre: string }).nombre}
-                          </p>
-                        )}
-                        <p className="text-sm font-bold text-primario">
-                          {formatoCOP(pedido.total)}
-                        </p>
+                    {/* Forma de mesa visual */}
+                    <div className="relative px-4 pt-4 pb-2">
+                      {/* Badge estado */}
+                      <div className="absolute top-2 right-2 z-10">
+                        <span className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/80 backdrop-blur-sm ${cfg.text}`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot} ${estado !== "libre" ? "animate-pulse" : ""}`} />
+                          {cfg.label}
+                        </span>
                       </div>
-                    )}
+
+                      {/* SVG de mesa con sillas */}
+                      <div className="w-full h-24 flex items-center justify-center">
+                        <FormaMesa tipo={mesa.tipo} capacidad={mesa.capacidad} color={colorSvg} />
+                      </div>
+                    </div>
+
+                    {/* Info */}
+                    <div className="bg-white/70 backdrop-blur-sm px-4 py-3 border-t border-white/50">
+                      <h3 className="font-bold text-cafe-oscuro text-sm">{mesa.nombre}</h3>
+                      <p className="text-[11px] text-cafe">
+                        {mesa.capacidad > 0 ? `${mesa.capacidad} personas` : TIPOS.find((t) => t.value === mesa.tipo)?.label}
+                      </p>
+
+                      {pedido && (
+                        <div className="mt-2 pt-2 border-t border-crema-oscuro/50">
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs font-semibold text-cafe-oscuro">
+                              #{pedido.numero}
+                              {(pedido.clientes as unknown as { nombre: string } | null)?.nombre && (
+                                <span className="font-normal text-cafe"> · {(pedido.clientes as unknown as { nombre: string }).nombre}</span>
+                              )}
+                            </span>
+                            <span className="text-[10px] text-cafe">{tiempoTranscurrido(pedido.creado_en)}</span>
+                          </div>
+                          <p className="text-sm font-bold text-primario mt-0.5">
+                            {formatoCOP(pedido.total)}
+                          </p>
+                        </div>
+                      )}
+                    </div>
 
                     {/* Acciones hover */}
-                    <div className="absolute bottom-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute top-2 left-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                       <button
                         onClick={(e) => { e.stopPropagation(); abrirEditar(mesa); }}
-                        className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition-colors"
+                        className="w-7 h-7 rounded-lg bg-white/90 text-blue-600 flex items-center justify-center hover:bg-blue-50 transition-colors shadow-sm"
                       >
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -372,7 +424,7 @@ export default function MapaMesas({
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); eliminarMesa(mesa.id, mesa.nombre); }}
-                        className="w-7 h-7 rounded-lg bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-100 transition-colors"
+                        className="w-7 h-7 rounded-lg bg-white/90 text-red-500 flex items-center justify-center hover:bg-red-50 transition-colors shadow-sm"
                       >
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
