@@ -204,6 +204,7 @@ export default function MapaMesas({
     capacidad: 4,
     zona: "principal",
   });
+  const [filtroEstado, setFiltroEstado] = useState<string | null>(null);
   const [, setTick] = useState(0);
 
   const router = useRouter();
@@ -236,14 +237,19 @@ export default function MapaMesas({
     return () => clearInterval(i);
   }, []);
 
+  const mesasFiltradas = useMemo(() => {
+    if (!filtroEstado) return mesas;
+    return mesas.filter((m) => obtenerEstadoMesa(m, pedidos) === filtroEstado);
+  }, [mesas, pedidos, filtroEstado]);
+
   const zonas = useMemo(() => {
     const z: Record<string, Mesa[]> = {};
-    mesas.forEach((m) => {
+    mesasFiltradas.forEach((m) => {
       if (!z[m.zona]) z[m.zona] = [];
       z[m.zona].push(m);
     });
     return z;
-  }, [mesas]);
+  }, [mesasFiltradas]);
 
   const resumen = useMemo(() => {
     let libres = 0, ocupadas = 0;
@@ -331,18 +337,35 @@ export default function MapaMesas({
         </button>
       </div>
 
-      {/* Resumen rápido */}
-      <div className="flex gap-3 mb-6">
+      {/* Resumen rápido — filtros clickeables */}
+      <div className="flex gap-3 mb-6 flex-wrap">
         {Object.entries(ESTADO_CONFIG).map(([key, cfg]) => {
           let count = 0;
           mesas.forEach((m) => { if (obtenerEstadoMesa(m, pedidos) === key) count++; });
+          const activo = filtroEstado === key;
           return (
-            <div key={key} className={`flex items-center gap-2 px-3 py-2 rounded-xl ${cfg.bg} border ${cfg.border}`}>
+            <button
+              key={key}
+              onClick={() => setFiltroEstado(activo ? null : key)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${
+                activo
+                  ? `${cfg.bg} ${cfg.border} ring-2 ring-offset-1 ring-primario shadow-md scale-105`
+                  : `${cfg.bg} ${cfg.border} opacity-80 hover:opacity-100 hover:shadow`
+              }`}
+            >
               <div className={`w-2.5 h-2.5 rounded-full ${cfg.dot}`} />
               <span className={`text-sm font-medium ${cfg.text}`}>{cfg.label}: {count}</span>
-            </div>
+            </button>
           );
         })}
+        {filtroEstado && (
+          <button
+            onClick={() => setFiltroEstado(null)}
+            className="flex items-center gap-1 px-3 py-2 rounded-xl bg-white border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400 transition-all text-sm"
+          >
+            ✕ Limpiar filtro
+          </button>
+        )}
       </div>
 
       {/* Mapa por zonas */}
