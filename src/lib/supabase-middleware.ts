@@ -30,7 +30,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Rutas protegidas: si no hay sesión, redirigir a login
-  const rutasProtegidas = ["/dashboard", "/pos", "/cocina", "/inventario", "/finanzas", "/catalogo", "/mesas"];
+  const rutasProtegidas = ["/dashboard", "/pos", "/cocina", "/inventario", "/finanzas", "/catalogo", "/mesas", "/reportes"];
   const esRutaProtegida = rutasProtegidas.some((ruta) =>
     request.nextUrl.pathname.startsWith(ruta)
   );

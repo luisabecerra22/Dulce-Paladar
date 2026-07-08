@@ -1,0 +1,43 @@
+{
+  "name": "Dulce Paladar",
+  "short_name": "Dulce Paladar",
+  "description": "Sistema de gestión para Dulce Paladar — Repostería Artesanal",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#faf8f5",
+  "theme_color": "#F400A1",
+  "orientation": "portrait-primary",
+  "categories": ["business", "food"],
+  "lang": "es-CO",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nueva venta",
+      "url": "/pos",
+      "description": "Abrir POS para nueva venta"
+    },
+    {
+      "name": "Mesas",
+      "url": "/mesas",
+      "description": "Ver mesas"
+    },
+    {
+      "name": "Comandas",
+      "url": "/cocina",
+      "description": "Ver comandas de cocina"
+    }
+  ]
+}
