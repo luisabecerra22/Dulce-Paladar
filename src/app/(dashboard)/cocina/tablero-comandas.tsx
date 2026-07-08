@@ -110,6 +110,8 @@ export default function TableroComandas({
 
   async function cambiarEstado(pedidoId: string, nuevoEstado: string) {
     setActualizando(pedidoId);
+    const pedido = pedidos.find((p) => p.id === pedidoId);
+
     const { error } = await supabase
       .from("pedidos")
       .update({ estado: nuevoEstado })
@@ -118,6 +120,20 @@ export default function TableroComandas({
     if (error) {
       alert("Error al actualizar: " + error.message);
     } else {
+      // Notificación push cuando el pedido está listo
+      if (nuevoEstado === "listo" && pedido) {
+        const destino = pedido.tipo === "mesa" ? `Mesa ${pedido.mesa_numero}` : TIPO_LABEL[pedido.tipo] || pedido.tipo;
+        fetch("/api/notificaciones/enviar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            titulo: "🍰 Pedido listo",
+            cuerpo: `Pedido #${pedido.numero} — ${destino} está listo para entregar`,
+            url: "/mesas",
+            tag: `pedido-listo-${pedido.id}`,
+          }),
+        }).catch(() => {});
+      }
       await recargarPedidos();
     }
     setActualizando(null);
