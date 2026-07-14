@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase-browser";
 import { useRouter } from "next/navigation";
 import { formatoCOP } from "@/lib/formato";
 import CuadresCaja from "./cuadres-caja";
+import Impuestos from "./impuestos";
 
 type PedidoResumen = { total: number; medio_pago?: string | null; estado: string; creado_en?: string };
 type Gasto = {
@@ -49,7 +50,7 @@ export default function PanelFinanzas({
   cuentasIniciales: CuentaPagar[];
   fechaHoy: string;
 }) {
-  const [tab, setTab] = useState<"resumen" | "gastos" | "cuentas" | "cuadres">("resumen");
+  const [tab, setTab] = useState<"resumen" | "gastos" | "cuentas" | "cuadres" | "impuestos">("resumen");
   const [gastos, setGastos] = useState(gastosIniciales);
   const [cuentas, setCuentas] = useState(cuentasIniciales);
   const [modalGasto, setModalGasto] = useState(false);
@@ -206,6 +207,7 @@ export default function PanelFinanzas({
           { key: "gastos", label: "Gastos" },
           { key: "cuentas", label: "Cuentas por pagar" },
           { key: "cuadres", label: "Cuadres de caja" },
+          { key: "impuestos", label: "Impuestos" },
         ].map((t) => (
           <button
             key={t.key}
@@ -455,6 +457,9 @@ export default function PanelFinanzas({
 
       {/* TAB: Cuadres de caja */}
       {tab === "cuadres" && <CuadresCaja />}
+
+      {/* TAB: Impuestos */}
+      {tab === "impuestos" && <Impuestos />}
 
       {/* Modal: Registrar gasto */}
       {modalGasto && (

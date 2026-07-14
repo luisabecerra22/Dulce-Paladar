@@ -138,35 +138,15 @@ export default function Sidebar({ nombre, rol }: { nombre: string; rol: string }
   return (
     <aside
       className={`${collapsed ? "w-[72px]" : "w-60"} flex flex-col transition-all duration-200 ease-in-out relative overflow-hidden flex-shrink-0`}
-      style={{ background: "#100820" }}
+      style={{
+        backgroundImage: "url('/icons/fondo-sidebar.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
     >
-      {/* ── Textura mármol ── */}
-      <svg
-        className="absolute inset-0 w-full h-full pointer-events-none select-none"
-        xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="xMidYMid slice"
-        viewBox="0 0 240 900"
-        aria-hidden="true"
-      >
-        <defs>
-          <filter id="mv">
-            <feGaussianBlur stdDeviation="5" />
-          </filter>
-        </defs>
-        {/* venas mármol */}
-        <path d="M0 180 C80 140 160 220 240 140" stroke="rgba(194,100,250,0.12)" strokeWidth="14" fill="none" filter="url(#mv)" />
-        <path d="M0 380 C100 340 160 420 240 360" stroke="rgba(255,255,255,0.04)" strokeWidth="18" fill="none" filter="url(#mv)" />
-        <path d="M60 0 C70 200 40 400 80 900" stroke="rgba(194,100,250,0.09)" strokeWidth="8" fill="none" filter="url(#mv)" />
-        <path d="M180 0 C160 250 200 500 150 900" stroke="rgba(194,100,250,0.07)" strokeWidth="6" fill="none" filter="url(#mv)" />
-        <path d="M0 600 C80 560 180 640 240 580" stroke="rgba(255,215,0,0.04)" strokeWidth="10" fill="none" filter="url(#mv)" />
-        {/* blobs esquina superior */}
-        <ellipse cx="30" cy="60" rx="90" ry="80" fill="rgba(194,100,250,0.14)" filter="url(#mv)" />
-        <ellipse cx="-10" cy="30" rx="60" ry="55" fill="rgba(140,60,210,0.12)" filter="url(#mv)" />
-        {/* blobs esquina inferior */}
-        <ellipse cx="50" cy="840" rx="100" ry="90" fill="rgba(155,64,224,0.16)" filter="url(#mv)" />
-        <ellipse cx="10" cy="880" rx="70" ry="65" fill="rgba(194,100,250,0.10)" filter="url(#mv)" />
-        <ellipse cx="120" cy="870" rx="55" ry="50" fill="rgba(255,215,0,0.04)" filter="url(#mv)" />
-      </svg>
+      {/* Overlay oscuro para legibilidad */}
+      <div className="absolute inset-0 bg-[#1a0535]/70 pointer-events-none select-none" />
 
       {/* ── Logo ── */}
       <div className="p-4 flex items-center gap-3 relative z-10">
