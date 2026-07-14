@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase-browser";
 import { useState } from "react";
@@ -23,8 +24,12 @@ const menuVendedor = [
   { href: "/cocina", label: "Comandas", icono: "comandas" },
 ];
 
-const menuCocina = [
-  { href: "/cocina", label: "Comandas", icono: "comandas" },
+const menuCocina = [{ href: "/cocina", label: "Comandas", icono: "comandas" }];
+
+const menuConfiguracion = [
+  { href: "/configuracion/negocio", label: "Información del negocio" },
+  { href: "/configuracion/usuarios", label: "Usuarios y roles" },
+  { href: "/configuracion/mesas", label: "Configuración mesas" },
 ];
 
 function getMenu(rol: string) {
@@ -92,11 +97,36 @@ function Icono({ tipo, className }: { tipo: string; className?: string }) {
   }
 }
 
+function LogoCake({ collapsed }: { collapsed?: boolean }) {
+  return (
+    <Image
+      src="/icons/logo-dulce-paladar.png"
+      alt="Dulce Paladar"
+      width={collapsed ? 36 : 44}
+      height={collapsed ? 36 : 44}
+      className="object-contain drop-shadow-md"
+      priority
+    />
+  );
+}
+
+function IconConfig({ className }: { className?: string }) {
+  return (
+    <svg className={className || "w-5 h-5"} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+  );
+}
+
 export default function Sidebar({ nombre, rol }: { nombre: string; rol: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const menu = getMenu(rol);
   const [collapsed, setCollapsed] = useState(false);
+  const [configAbierto, setConfigAbierto] = useState(false);
+
+  const esConfigActivo = pathname.startsWith("/configuracion");
 
   async function handleLogout() {
     const supabase = createClient();
@@ -107,34 +137,60 @@ export default function Sidebar({ nombre, rol }: { nombre: string; rol: string }
 
   return (
     <aside
-      className={`${
-        collapsed ? "w-[72px]" : "w-60"
-      } bg-cafe-oscuro flex flex-col transition-all duration-200 ease-in-out`}
+      className={`${collapsed ? "w-[72px]" : "w-60"} flex flex-col transition-all duration-200 ease-in-out relative overflow-hidden flex-shrink-0`}
+      style={{ background: "#100820" }}
     >
-      {/* Logo */}
-      <div className="p-4 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primario to-secundario flex items-center justify-center flex-shrink-0">
-          <span className="text-white text-sm font-bold">DP</span>
+      {/* ── Textura mármol ── */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none select-none"
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 240 900"
+        aria-hidden="true"
+      >
+        <defs>
+          <filter id="mv">
+            <feGaussianBlur stdDeviation="5" />
+          </filter>
+        </defs>
+        {/* venas mármol */}
+        <path d="M0 180 C80 140 160 220 240 140" stroke="rgba(194,100,250,0.12)" strokeWidth="14" fill="none" filter="url(#mv)" />
+        <path d="M0 380 C100 340 160 420 240 360" stroke="rgba(255,255,255,0.04)" strokeWidth="18" fill="none" filter="url(#mv)" />
+        <path d="M60 0 C70 200 40 400 80 900" stroke="rgba(194,100,250,0.09)" strokeWidth="8" fill="none" filter="url(#mv)" />
+        <path d="M180 0 C160 250 200 500 150 900" stroke="rgba(194,100,250,0.07)" strokeWidth="6" fill="none" filter="url(#mv)" />
+        <path d="M0 600 C80 560 180 640 240 580" stroke="rgba(255,215,0,0.04)" strokeWidth="10" fill="none" filter="url(#mv)" />
+        {/* blobs esquina superior */}
+        <ellipse cx="30" cy="60" rx="90" ry="80" fill="rgba(194,100,250,0.14)" filter="url(#mv)" />
+        <ellipse cx="-10" cy="30" rx="60" ry="55" fill="rgba(140,60,210,0.12)" filter="url(#mv)" />
+        {/* blobs esquina inferior */}
+        <ellipse cx="50" cy="840" rx="100" ry="90" fill="rgba(155,64,224,0.16)" filter="url(#mv)" />
+        <ellipse cx="10" cy="880" rx="70" ry="65" fill="rgba(194,100,250,0.10)" filter="url(#mv)" />
+        <ellipse cx="120" cy="870" rx="55" ry="50" fill="rgba(255,215,0,0.04)" filter="url(#mv)" />
+      </svg>
+
+      {/* ── Logo ── */}
+      <div className="p-4 flex items-center gap-3 relative z-10">
+        <div className="flex-shrink-0 text-[#C264FA]">
+          <LogoCake collapsed={collapsed} />
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
             <h2 className="font-bold text-white text-sm font-[family-name:var(--font-principal)] leading-tight">
               Dulce Paladar
             </h2>
-            <p className="text-[10px] text-cafe-claro uppercase tracking-wider">
-              {rol}
-            </p>
+            <p className="text-[10px] text-[#C264FA]/70 uppercase tracking-wider">{rol}</p>
           </div>
         )}
       </div>
 
       {/* Separador */}
-      <div className="mx-3 h-px bg-white/10" />
+      <div className="mx-3 h-px bg-white/10 relative z-10" />
 
-      {/* Menú */}
-      <nav className="flex-1 py-3 px-2 space-y-0.5">
+      {/* ── Menú principal ── */}
+      <nav className="flex-1 py-3 px-2 space-y-0.5 relative z-10 overflow-y-auto">
         {menu.map((item) => {
-          const activo = pathname === item.href || pathname.startsWith(item.href + "/");
+          const activo =
+            pathname === item.href || pathname.startsWith(item.href + "/");
           return (
             <Link
               key={item.href}
@@ -142,8 +198,8 @@ export default function Sidebar({ nombre, rol }: { nombre: string; rol: string }
               title={collapsed ? item.label : undefined}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
                 activo
-                  ? "bg-primario text-white shadow-lg shadow-primario/20"
-                  : "text-white/60 hover:text-white hover:bg-white/8"
+                  ? "border-l-2 border-[#FFD700] bg-[#FFD700]/10 text-[#FFD700]"
+                  : "text-white/55 hover:text-white hover:bg-white/8 border-l-2 border-transparent"
               }`}
             >
               <Icono tipo={item.icono} className="w-5 h-5 flex-shrink-0" />
@@ -153,36 +209,91 @@ export default function Sidebar({ nombre, rol }: { nombre: string; rol: string }
         })}
       </nav>
 
-      {/* Collapse toggle */}
-      <div className="px-2 pb-1">
+      {/* ── Colapsar ── */}
+      <div className="px-2 pb-1 relative z-10">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 text-white/40 hover:text-white/70 text-xs transition-colors rounded-lg hover:bg-white/5"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 text-white/35 hover:text-white/60 text-xs transition-colors rounded-lg hover:bg-white/5"
         >
-          <svg className={`w-4 h-4 transition-transform ${collapsed ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg
+            className={`w-4 h-4 transition-transform ${collapsed ? "rotate-180" : ""}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
           </svg>
           {!collapsed && <span>Colapsar</span>}
         </button>
       </div>
 
-      {/* Usuario y logout */}
-      <div className="p-3 border-t border-white/10">
-        <div className={`flex items-center ${collapsed ? "justify-center" : "gap-3"}`}>
-          <div className="w-8 h-8 rounded-full bg-primario/20 flex items-center justify-center flex-shrink-0">
-            <span className="text-primario text-xs font-bold">
-              {nombre.charAt(0).toUpperCase()}
-            </span>
-          </div>
+      {/* ── Submenu configuración (popup hacia arriba) ── */}
+      {configAbierto && (
+        <div className="absolute bottom-[72px] left-2 right-2 z-30 bg-[#1e0f3a] border border-white/15 rounded-xl overflow-hidden shadow-2xl shadow-black/40">
           {!collapsed && (
+            <p className="px-4 pt-3 pb-1 text-[10px] text-white/40 uppercase tracking-widest font-semibold">
+              Configuración
+            </p>
+          )}
+          {menuConfiguracion.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setConfigAbierto(false)}
+              className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${
+                pathname.startsWith(item.href)
+                  ? "text-[#FFD700] bg-[#FFD700]/8"
+                  : "text-white/65 hover:text-white hover:bg-white/8"
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-current flex-shrink-0" />
+              {!collapsed && item.label}
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* ── Sección inferior: config + usuario ── */}
+      <div className="p-3 border-t border-white/10 relative z-10">
+        <div className="flex items-center gap-2">
+          {/* Gear configuración */}
+          <button
+            onClick={() => setConfigAbierto(!configAbierto)}
+            title="Configuración"
+            className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${
+              esConfigActivo || configAbierto
+                ? "bg-[#FFD700]/15 text-[#FFD700]"
+                : "text-white/40 hover:text-white/70 hover:bg-white/8"
+            }`}
+          >
+            <IconConfig className="w-4.5 h-4.5" />
+          </button>
+
+          {/* Info usuario */}
+          <div className={`flex items-center gap-2 flex-1 min-w-0 ${collapsed ? "hidden" : ""}`}>
+            <div className="w-8 h-8 rounded-full bg-[#C264FA]/20 border border-[#C264FA]/30 flex items-center justify-center flex-shrink-0">
+              <span className="text-[#C264FA] text-xs font-bold">
+                {nombre.charAt(0).toUpperCase()}
+              </span>
+            </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">{nombre}</p>
               <button
                 onClick={handleLogout}
-                className="text-xs text-white/40 hover:text-red-400 transition-colors"
+                className="text-xs text-white/35 hover:text-red-400 transition-colors"
               >
                 Cerrar sesión
               </button>
+            </div>
+          </div>
+
+          {/* Avatar solo cuando está colapsado */}
+          {collapsed && (
+            <div className="w-8 h-8 rounded-full bg-[#C264FA]/20 border border-[#C264FA]/30 flex items-center justify-center">
+              <span className="text-[#C264FA] text-xs font-bold">
+                {nombre.charAt(0).toUpperCase()}
+              </span>
             </div>
           )}
         </div>

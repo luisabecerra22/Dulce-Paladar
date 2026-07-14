@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf8f5;
-  --foreground: #2d2319;
+  --background: #faf5ff;
+  --foreground: #2d1b4e;
 
   /* Colores de marca Dulce Paladar */
-  --color-primario: #F400A1;
-  --color-secundario: #C273E0;
-  --color-primario-claro: #ff4dbe;
-  --color-primario-oscuro: #c20080;
-  --color-secundario-claro: #d9a3ed;
-  --color-secundario-oscuro: #9b4cc0;
+  --color-primario: #C264FA;
+  --color-secundario: #FFD700;
+  --color-primario-claro: #d48cfb;
+  --color-primario-oscuro: #9b40e0;
+  --color-secundario-claro: #ffe44d;
+  --color-secundario-oscuro: #c9a800;
 
-  /* Cálidos de pastelería */
-  --color-crema: #fdf6ee;
-  --color-crema-oscuro: #f5ead8;
-  --color-cafe: #8b6f47;
-  --color-cafe-claro: #c9a96e;
-  --color-cafe-oscuro: #5c4a2f;
-  --color-rosa-suave: #fce4ec;
-  --color-rosa-medio: #f8bbd0;
+  /* Lavanda — fondo y superficies */
+  --color-crema: #f5efff;
+  --color-crema-oscuro: #e8d9ff;
+  --color-cafe: #6b4fa0;
+  --color-cafe-claro: #9b7bc0;
+  --color-cafe-oscuro: #2d1b4e;
+  --color-rosa-suave: #f0e8ff;
+  --color-rosa-medio: #ddc8ff;
 
   /* Neutros */
   --color-gris-50: #fafafa;
