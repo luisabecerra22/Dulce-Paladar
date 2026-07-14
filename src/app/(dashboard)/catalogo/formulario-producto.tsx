@@ -17,6 +17,8 @@ type Producto = {
   foto_url: string | null;
   activo: boolean;
   visible_web: boolean;
+  en_promocion: boolean;
+  descuento_porcentaje: number;
   variaciones?: Variacion[];
 };
 
@@ -30,6 +32,8 @@ const productoVacio: Producto = {
   foto_url: null,
   activo: true,
   visible_web: true,
+  en_promocion: false,
+  descuento_porcentaje: 0,
 };
 
 export default function FormularioProducto({
@@ -126,6 +130,8 @@ export default function FormularioProducto({
       foto_url: producto.foto_url,
       activo: producto.activo,
       visible_web: producto.visible_web,
+      en_promocion: producto.en_promocion,
+      descuento_porcentaje: producto.en_promocion ? producto.descuento_porcentaje : 0,
     };
 
     if (esEdicion) {
@@ -369,7 +375,7 @@ export default function FormularioProducto({
       </div>
 
       {/* Opciones */}
-      <div className="flex gap-6">
+      <div className="flex gap-6 flex-wrap">
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -388,6 +394,48 @@ export default function FormularioProducto({
           />
           <span className="text-sm text-gray-700">Visible en página web</span>
         </label>
+      </div>
+
+      {/* Promoción */}
+      <div className="border border-[#F400A1]/30 rounded-xl p-4 bg-[#F400A1]/5">
+        <label className="flex items-center gap-2 cursor-pointer mb-3">
+          <input
+            type="checkbox"
+            checked={producto.en_promocion}
+            onChange={(e) => actualizarCampo("en_promocion", e.target.checked)}
+            className="w-4 h-4 rounded border-gray-300 text-[#F400A1] focus:ring-[#F400A1]"
+          />
+          <span className="text-sm font-semibold text-[#F400A1]">🏷️ En promoción</span>
+        </label>
+        {producto.en_promocion && (
+          <div className="flex items-center gap-3">
+            <label className="text-sm text-gray-700 whitespace-nowrap">
+              Descuento:
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                min={1}
+                max={99}
+                value={producto.descuento_porcentaje || ""}
+                onChange={(e) =>
+                  actualizarCampo("descuento_porcentaje", Math.min(99, Math.max(1, Number(e.target.value) || 1)))
+                }
+                className="w-20 px-3 py-2 border border-[#F400A1]/40 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#F400A1] text-center font-bold text-[#F400A1]"
+                placeholder="0"
+              />
+              <span className="text-sm font-bold text-[#F400A1]">%</span>
+            </div>
+            {producto.precio_base && producto.descuento_porcentaje > 0 && (
+              <span className="text-xs text-gray-500">
+                Precio con descuento:{" "}
+                <span className="font-semibold text-green-600">
+                  ${Math.round(producto.precio_base * (1 - producto.descuento_porcentaje / 100)).toLocaleString("es-CO")}
+                </span>
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Error */}
