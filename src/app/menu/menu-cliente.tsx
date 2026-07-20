@@ -238,10 +238,12 @@ export default function MenuCliente({
             Repostería artesanal hecha con amor 🩷
             {config?.ciudad && ` · ${config.ciudad}`}
           </p>
-          <WhatsAppBtn
-            telefono={telefono}
-            texto={`Hola ${nombre}! Me gustaría hacer un pedido.`}
-          />
+          <div className="flex justify-center">
+            <WhatsAppBtn
+              telefono={telefono}
+              texto={`Hola ${nombre}! Me gustaría hacer un pedido.`}
+            />
+          </div>
         </div>
       </header>
 
