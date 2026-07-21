@@ -384,7 +384,7 @@ export default function MenuCliente({
         </div>
         <div className="relative z-10 max-w-5xl mx-auto px-6 py-10 text-center">
           {config?.logo_url ? (
-            <img src={config.logo_url} alt={nombre} className="w-32 h-32 object-contain mx-auto mb-4 drop-shadow-xl" />
+            <img src={config.logo_url} alt={nombre} className="w-36 h-auto mx-auto mb-4 mix-blend-screen drop-shadow-xl" />
           ) : (
             <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center text-5xl">🎂</div>
           )}
