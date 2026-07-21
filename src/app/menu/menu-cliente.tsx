@@ -224,7 +224,7 @@ export default function MenuCliente({
             <img
               src={config.logo_url}
               alt={nombre}
-              className="w-24 h-24 object-contain mx-auto mb-4 drop-shadow-xl rounded-full bg-white/10 p-1"
+              className="w-32 h-32 object-contain mx-auto mb-4 drop-shadow-xl"
             />
           ) : (
             <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center text-5xl">
