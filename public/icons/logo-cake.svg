@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 110" fill="currentColor">
+  <!-- flame -->
+  <path d="M40 3 C43 9 47 18 40 25 C33 18 37 9 40 3Z"/>
+  <!-- candle -->
+  <rect x="37" y="24" width="6" height="11" rx="1.5"/>
+  <!-- top cake tier -->
+  <rect x="25" y="34" width="30" height="22" rx="6"/>
+  <!-- top tier frosting -->
+  <path d="M25 40 C28 33 32 33 35 40 C38 47 42 47 45 40 C48 33 52 33 55 40 L55 34 L25 34Z" fill="white"/>
+  <!-- bottom cake tier -->
+  <rect x="13" y="55" width="54" height="30" rx="8"/>
+  <!-- bottom tier frosting -->
+  <path d="M13 63 C17 54 22 54 26 63 C30 72 35 72 40 63 C45 54 50 54 54 63 C58 72 63 72 67 63 L67 55 L13 55Z" fill="white"/>
+  <!-- stand plate line -->
+  <path d="M9 89 Q40 84 71 89" stroke="currentColor" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <!-- stand legs -->
+  <path d="M29 89 C28 98 22 103 20 110 M51 89 C52 98 58 103 60 110" stroke="currentColor" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <!-- stand base -->
+  <path d="M16 110 Q40 116 64 110" stroke="currentColor" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+</svg>
